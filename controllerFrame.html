@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+.control-frame-stage {position: relative;width: 600px;height: 400px;background-color: #fea;float: left;}
+.control-frame {position: absolute;}
+.control-frame-stage #polygon {fill: transparent;cursor: -webkit-grab}
+.control-frame-stage.draggable #polygon {cursor: pointer;}
+.control-frame-stage #polygon.grabbing {cursor: -webkit-grabbing;}
+.control-frame-stage line,
+.control-frame-stage circle {cursor: pointer; }
+.control-frame-stage line {stroke:#f00;stroke-width:2; }
+.control-frame-stage circle {fill:#f00;stroke:#f00 }
+#h-title {font-weight: bold;font-size: 16px;margin-left: 12px;margin-top: 0;}
+#history {float: left;max-width: 500px;}
+	</style>
+</head>
+<body>
+	<div id="stage" class="control-frame-stage">
+	</div>
+	<div id="history">
+		<h3 id="h-title">Tracking:</h3>
+		<ol id="history-list"></ol>
+	</div>
+
+	<script src="./controllerFrame.js"></script>
+	<script>
+	var stage = document.getElementById('stage');
+	var list= document.getElementById('history-list');
+	var points = [[50,50], [350,50], [350,150], [50,150]];
+	controllerFrame({
+		points: points,
+		stage: stage,
+		onSave: function (points) {
+			var li = document.createElement('li');
+			li.innerHTML = points.toString();
+			list.appendChild(li);
+			if (list.children.length > 20 ) {
+				list.removeChild(list.children[0]);
+			}
+		}
+	});
+	</script>
+</body>
+</html>
