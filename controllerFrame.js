@@ -4,10 +4,9 @@ function controllerFrame(config) {
 		points: [[-9,-9],[-9,-9],[-9,-9],[-9,-9]],
 		onUpdateFrame: emptyFun,
 		onSave: emptyFun,
-		onUndo: config.onUndo || config.onSave,
-		onRedo: config.onRedo || config.onSave
+		onUndo: config.onUndo || emptyFun,
+		onRedo: config.onRedo || emptyFun
 	}, config);
-	
 	var body = document.body;
 	var stage = conf.stage;
 	var points = conf.points;
@@ -209,6 +208,18 @@ function controllerFrame(config) {
 		rotateable = false;
 		dirctionLocked = false;
 	});
+	body.addEventListener('mouseout', function(e) {
+		rotateable = false;
+	});
+	body.addEventListener('keyup', function(e) {
+		if ( e.ctrlKey && e.keyCode === 90 ) { // z
+			if (e.shiftKey) {
+				redo();
+			} else {
+				undo();
+			}
+		}
+	});
 
 
 	
@@ -217,11 +228,11 @@ function controllerFrame(config) {
 		var mPoint = points[index];
 		if (isShiftKey) {
 			uniformScale([(cPoint[0]+mPoint[0])/2, (cPoint[1]+mPoint[1])/2],
-				mPoint, point, false);
+				mPoint, point, true);
 		} else if (isCtrlKey) {
 			points[index] = pointToArray(point);
 		} else {
-			uniformScale(cPoint, mPoint, point, true);
+			uniformScale(cPoint, mPoint, point, false);
 		}
 		updateFrame();
 	}
